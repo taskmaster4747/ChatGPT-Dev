@@ -6,33 +6,44 @@
   <title>Flappy Bird Clone</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { display: flex; justify-content: center; align-items: center; height: 100vh; background: skyblue; font-family: sans-serif; }
+    body { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: skyblue; font-family: sans-serif; }
     canvas { background: #70c5ce; border: 2px solid #000; }
+    #restartBtn {
+      display: none;
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #ffcc00;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <canvas id="gameCanvas" width="400" height="600"></canvas>
+  <button id="restartBtn">Restart Game</button>
 
   <script>
     const canvas = document.getElementById("gameCanvas");
     const ctx = canvas.getContext("2d");
+    const restartBtn = document.getElementById("restartBtn");
 
-    let birdY = 200;
-    let birdVelocity = 0;
+    let birdVelocity, birdY, bird, pipes, frame, score, gameOver;
     const gravity = 0.5;
     const flapStrength = -8;
 
-    const bird = {
-      x: 80,
-      y: birdY,
-      width: 30,
-      height: 30
-    };
-
-    let pipes = [];
-    let frame = 0;
-    let score = 0;
-    let gameOver = false;
+    function initGame() {
+      birdY = 200;
+      birdVelocity = 0;
+      bird = { x: 80, y: birdY, width: 30, height: 30 };
+      pipes = [];
+      frame = 0;
+      score = 0;
+      gameOver = false;
+      restartBtn.style.display = 'none';
+      gameLoop();
+    }
 
     function drawBird() {
       ctx.fillStyle = "yellow";
@@ -87,6 +98,7 @@
         ctx.fillStyle = "black";
         ctx.font = "36px sans-serif";
         ctx.fillText("Game Over", 100, 300);
+        restartBtn.style.display = 'block';
         return;
       }
 
@@ -112,13 +124,26 @@
       requestAnimationFrame(gameLoop);
     }
 
-    document.addEventListener("keydown", e => {
-      if (e.code === "Space") {
+    function flap() {
+      if (!gameOver) {
         birdVelocity = flapStrength;
       }
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.code === "Space") flap();
     });
 
-    gameLoop();
+    canvas.addEventListener("touchstart", e => {
+      e.preventDefault();
+      flap();
+    }, { passive: false });
+
+    restartBtn.addEventListener("click", () => {
+      initGame();
+    });
+
+    initGame();
   </script>
 </body>
 </html>
