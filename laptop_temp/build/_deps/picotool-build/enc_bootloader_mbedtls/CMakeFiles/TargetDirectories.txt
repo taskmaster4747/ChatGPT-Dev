@@ -1,2 +1,0 @@
-/home/kishan/pico/laptop_temp/build/_deps/picotool-build/enc_bootloader_mbedtls/CMakeFiles/edit_cache.dir
-/home/kishan/pico/laptop_temp/build/_deps/picotool-build/enc_bootloader_mbedtls/CMakeFiles/rebuild_cache.dir
